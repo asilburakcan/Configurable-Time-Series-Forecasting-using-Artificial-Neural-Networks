@@ -139,24 +139,28 @@ This preserves **temporal ordering** (future never leaks into past), which is cr
 
 ## 4. Evaluation Metrics
 
-After training, the model evaluates performance on each split:
+After training, the model evaluates performance on each split using:
 
 ### **• MSE (Mean Squared Error)**
-\[
-\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
-\]
+Measures average squared difference between actual and predicted values.
+```
+MSE = (1/n) * Σ (y_i - ŷ_i)²
+```
 
 ### **• RMSE (Root Mean Squared Error)**
-\[
-\text{RMSE} = \sqrt{\text{MSE}}
-\]
+Square root of MSE — same unit as the target variable.
+```
+RMSE = sqrt(MSE)
+```
 
 ### **• R² (Coefficient of Determination)**
-\[
-R^2 = 1 - \frac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}
-\]
+Indicates how much variance in the target variable is explained by the model (1.0 = perfect).
+```
+R² = 1 - [ Σ (y_i - ŷ_i)² ] / [ Σ (y_i - ȳ)² ]
+```
 
-Higher R² means more variance in the target variable is explained by the model (1.0 = perfect fit).
+Higher R² means the model fits the historical data better.
+Which means more variance in the target variable is explained by the model (1.0 = perfect fit).
 
 Example console output:
 
