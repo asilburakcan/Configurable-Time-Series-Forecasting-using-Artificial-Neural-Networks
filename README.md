@@ -185,11 +185,11 @@ measures how much variance in y is explained by the model (1.0 = perfect).
 
 
 Output looks like:
-==== TIME SERIES NN PERFORMANCE ====
+TIME SERIES NN PERFORMANCE 
 [TRAIN] R²: 0.9821 | MSE:  950.123456 | RMSE: 30.825123
 [VAL]   R²: 0.7420 | MSE: 2300.789012 | RMSE: 47.963325
 [TEST]  R²: 0.7013 | MSE: 2600.456789 | RMSE: 50.993694
-====================================
+
 
 If you are forecasting gold futures and the price is around 4,000 USD, then:
 
