@@ -1,26 +1,6 @@
 import yfinance as yf
 
 def do_ts_forecast() -> None:
-    """
-    Neural network based time series forecasting:
-    - Fetches daily closing prices from yfinance
-    - Builds a lag-based supervised dataset using the last N data points
-    - Trains an MLPRegressor (NN) model
-    - Splits Train / Validation / Test sets in time order (fixed ratios: 0.7 / 0.15 / 0.15)
-    - Computes R² / MSE / RMSE for each set
-    - Forecasts the next `horizon` days and plots them
-
-    - Putting a very large number on the window side is unhealthy.
-      Layer 1: 1000 × 64 ≈ 64,000 weights
-      Layer 2: 64 × 64 ≈ 4,096 weights
-      Output : 64 × 1 ≈ 64 weights
-      → Just in this part you already have ~68k parameters. With biases you easily exceed 70k.
-      You are trying to estimate 70k parameters with 1400 training samples.
-      What does this mean?
-      The model has too many parameters, data is relatively small →
-      Extremely flexible function & serious overfitting risk.
-      R² can explode on the train set (0.99 etc.), while test behaves erratically.
-    """
     try:
         import numpy as np
         import pandas as pd
@@ -62,7 +42,7 @@ def do_ts_forecast() -> None:
         ).strip()
         neurons = int(neurons_str) if neurons_str else 64
 
-        # Single scenario: fixed ratios
+        # you should set your rates here
         train_ratio = 0.7
         val_ratio = 0.15
         test_ratio = 0.15
@@ -99,7 +79,7 @@ def do_ts_forecast() -> None:
             print("Selected n_points and window combination is too small.")
             return
 
-        # Supervised dataset: X = [p_{t-window},...,p_{t-1}], y = p_t
+        # to understand the data behaves eachother at the scale of observations
         X, y = [], []
         for i in range(window, len(series)):
             X.append(series[i - window:i])
@@ -173,11 +153,11 @@ def do_ts_forecast() -> None:
         else:
             mse_test = rmse_test = r2_test = float("nan")
 
-        print("\n==== TIME SERIES NN PERFORMANCE ====")
-        print(f"[TRAIN] R²: {r2_train:.4f} | MSE: {mse_train:.6f} | RMSE: {rmse_train:.6f}")
-        print(f"[VAL]   R²: {r2_val:.4f} | MSE: {mse_val:.6f} | RMSE: {rmse_val:.6f}")
-        print(f"[TEST]  R²: {r2_test:.4f} | MSE: {mse_test:.6f} | RMSE: {rmse_test:.6f}")
-        print("=====================================")
+        print("\n==== TIME SERIES NN PERFORMANCE ===========")
+        print(f"[TRAIN] R2: {r2_train:.4f} | MSE: {mse_train:.6f} | RMSE: {rmse_train:.6f}")
+        print(f"[VAL]   R2: {r2_val:.4f} | MSE: {mse_val:.6f} | RMSE: {rmse_val:.6f}")
+        print(f"[TEST]  R2: {r2_test:.4f} | MSE: {mse_test:.6f} | RMSE: {rmse_test:.6f}")
+        print("============(PS: price error is rmse)===================================")
 
         # FUTURE HORIZON PREDICTIONS
         last_window = series[-window:].copy()
@@ -210,7 +190,7 @@ def do_ts_forecast() -> None:
         plt.axvline(last_date, color="gray", linestyle=":", label="Forecast start")
         plt.title(
             f"{symbol} - NN Time Series Forecast\n"
-            f"TRAIN R²={r2_train:.3f}, TEST R²={r2_test:.3f}, "
+            f"TRAIN R2={r2_train:.3f}, TEST R2={r2_test:.3f}, "
             f"window={window}, layers={hidden_layers}, neurons={neurons}"
         )
         plt.xlabel("Date")
