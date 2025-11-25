@@ -137,23 +137,26 @@ This preserves **temporal ordering** (future never leaks into past), which is cr
 
 ---
 
-### 4. Evaluation Metrics
+## 4. Evaluation Metrics
 
-After training, the model predicts on each split and computes:
+After training, the model evaluates performance on each split:
 
-- **MSE (Mean Squared Error)**  
+### **• MSE (Mean Squared Error)**
+\[
+\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+\]
 
-  $$
-  \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
-  $$
+### **• RMSE (Root Mean Squared Error)**
+\[
+\text{RMSE} = \sqrt{\text{MSE}}
+\]
 
-- **RMSE (Root Mean Squared Error)**  
+### **• R² (Coefficient of Determination)**
+\[
+R^2 = 1 - \frac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}
+\]
 
-  $$
-  \text{RMSE} = \sqrt{\text{MSE}}
-  $$
-
-- **R² (Coefficient of Determination)** – how much variance in \(y\) is explained by the model (1.0 = perfect).
+Higher R² means more variance in the target variable is explained by the model (1.0 = perfect fit).
 
 Example console output:
 
